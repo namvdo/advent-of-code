@@ -1,3 +1,5 @@
+package day2;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -58,8 +60,8 @@ enum Command {
     public long calculate(long x, long y) {
         return switch (this) {
             case FORWARD, AIM_FORWARD_X, DOWN, AIM_DOWN -> x + y;
-            case UP, AIM_UP-> x - y;
-            case MULTIPLY, AIM_FORWARD_Y -> x* y;
+            case UP, AIM_UP -> x - y;
+            case MULTIPLY, AIM_FORWARD_Y -> x * y;
         };
     }
 }
