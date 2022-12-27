@@ -36,7 +36,7 @@ public class Day4 {
 
 	public static void main(String[] args) {
 		String input = Utils.getResourceAsString("2022/day4/part1");
-//		System.out.println(solvePart1(input));
+		System.out.println(solvePart1(input));
 		System.out.println(solvePart2(input));
 	}
 
@@ -44,7 +44,7 @@ public class Day4 {
 		Pair<Integer, Integer> range1 = getPairInt(pair).get(0);
 		Pair<Integer, Integer> range2 = getPairInt(pair).get(1);
 		return range1.getFirst() <= range2.getFirst() && range1.getSecond() >= range2.getSecond()
-				|| range2.getFirst() <= range1.getFirst() && range2.getSecond() >= range1.getSecond()
+				|| range2.getFirst() <= range1.getSecond() && range2.getSecond() >= range1.getSecond()
 				|| range1.getFirst().equals(range2.getFirst()) && range1.getSecond().equals(range2.getSecond());
 	}
 
@@ -57,10 +57,13 @@ public class Day4 {
 	}
 
 	private static boolean within2(Pair<String, String> pair) {
-		Pair<Integer, Integer> range1 = getPairInt(pair).get(0);
-		Pair<Integer, Integer> range2 = getPairInt(pair).get(1);
-
+        Pair<Integer, Integer> range1 = getPairInt(pair).get(0);
+        Pair<Integer, Integer> range2 = getPairInt(pair).get(1);
+        return range1.getFirst() >= range2.getFirst() && range1.getFirst() <= range2.getSecond()
+                || range2.getFirst() >= range1.getFirst() && range2.getFirst() <= range1.getSecond()
+                || within(pair);
 	}
+
 
 
 
