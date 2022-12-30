@@ -40,13 +40,37 @@ public class Day5 {
 		return sb.toString();
 	}
 
+    static String solvePart2(String input) {
+        Map<Integer, List<Character>> crates = getCrates(input).entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, x -> new ArrayList<>(x.getValue())));
+        var operations = getOperations(input);
+        for(final var op : operations) {
+            List<Character> from = crates.get(op.from);
+            int left = Math.max(0, from.size() - op.moves);
+            int right = Math.max(left + op.moves, from.size());
+            List<Character> moves = from.subList(left, right);
+            List<Character> stay = from.subList(0, Math.max(from.size() - op.moves, 0));
+            List<Character> to = crates.get(op.to);
+            to.addAll(moves);
+            crates.put(op.from, stay);
+        }
+        StringBuilder sb = new StringBuilder();
+        for(final var crate : crates.values()) {
+            if (!crate.isEmpty()) {
+                sb.append(crate.get(crate.size() - 1));
+            }
+        }
+        return sb.toString();
+    }
+
 	static Map<Integer, Stack<Character>> getCrates(String input) {
 		Map<Integer, Stack<Character>> bundle = new HashMap<>();
 		List<List<String>> lines = input
-				.lines()
-				.limit(8)
-				.map(x -> Arrays.stream(x.split("\\s+")).collect(Collectors.toList()))
-				.collect(Collectors.toList());
+                .lines()
+                .limit(8)
+                .map(x -> Arrays.stream(x.split("\\s+")).toList())
+                .toList();
 		for(int i = lines.size() - 1; i >= 0; i--) {
 			List<String> crates = lines.get(i);
 			for(int j = 0; j < crates.size(); j++) {
@@ -67,7 +91,7 @@ public class Day5 {
 	}
 
 	static List<Operation> getOperations(String input) {
-		List<String> lines = input.lines().skip(10).collect(Collectors.toList());
+		List<String> lines = input.lines().skip(10).toList();
 		List<Operation> operations = new ArrayList<>();
 		List<Integer> nums = new ArrayList<>();
 		for(final var line : lines) {
@@ -95,7 +119,8 @@ public class Day5 {
 	}
 
 	public static void main(String[] args) {
-		log.info(solvePart1(Utils.getResourceAsString("2022/day5")));
+//		log.info(solvePart1(Utils.getResourceAsString("2022/day5")));
+        log.info(solvePart2(Utils.getResourceAsString("2022/day5")));
 	}
 
 
