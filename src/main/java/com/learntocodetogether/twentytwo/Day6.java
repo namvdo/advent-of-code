@@ -28,7 +28,23 @@ public class Day6 {
         return -1;
     }
 
+    public static int solvePart2(String input) {
+        char[] chars = input.toCharArray();
+        for(int i = 0; i < chars.length - 14; i++) {
+            Set<Character> set = new HashSet<>();
+            for(int j = i; j < i + 14; j++) {
+               set.add(chars[j]);
+               if (set.size() == 14) {
+                   return j + 1;
+               }
+            }
+            set.clear();
+        }
+        return -1;
+    }
+
     public static void main(String[] args) {
-        log.info("{}", solvePart1(Utils.getResourceAsString("2022/day6")));
+        log.info("part 1: {}", solvePart1(Utils.getResourceAsString("2022/day6")));
+        log.info("part 2: {}", solvePart2(Utils.getResourceAsString("2022/day6")));
     }
 }
