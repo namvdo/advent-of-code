@@ -4,7 +4,6 @@ import com.learntocodetogether.utils.Pair;
 import com.learntocodetogether.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -43,15 +42,15 @@ public class Day4 {
 	static boolean within(Pair<String, String> pair) {
 		Pair<Integer, Integer> range1 = getPairInt(pair).get(0);
 		Pair<Integer, Integer> range2 = getPairInt(pair).get(1);
-		return range1.getFirst() <= range2.getFirst() && range1.getSecond() >= range2.getSecond()
-				|| range2.getFirst() <= range1.getSecond() && range2.getSecond() >= range1.getSecond()
-				|| range1.getFirst().equals(range2.getFirst()) && range1.getSecond().equals(range2.getSecond());
+		return range1.first() <= range2.first() && range1.second() >= range2.second()
+				|| range2.first() <= range1.second() && range2.second() >= range1.second()
+				|| range1.first().equals(range2.first()) && range1.second().equals(range2.second());
 	}
 
 	static List<Pair<Integer, Integer>> getPairInt(Pair<String, String> pair) {
-		String[] split1 = pair.getFirst().split("-");
+		String[] split1 = pair.first().split("-");
 		Pair<Integer, Integer> range1 = Pair.create(Integer.parseInt(split1[0]), Integer.parseInt(split1[1]));
-		String[] split2 = pair.getSecond().split("-");
+		String[] split2 = pair.second().split("-");
 		Pair<Integer, Integer> range2 = Pair.create(Integer.parseInt(split2[0]), Integer.parseInt(split2[1]));
 		return List.of(range1, range2);
 	}
@@ -59,8 +58,8 @@ public class Day4 {
 	private static boolean within2(Pair<String, String> pair) {
         Pair<Integer, Integer> range1 = getPairInt(pair).get(0);
         Pair<Integer, Integer> range2 = getPairInt(pair).get(1);
-        return range1.getFirst() >= range2.getFirst() && range1.getFirst() <= range2.getSecond()
-                || range2.getFirst() >= range1.getFirst() && range2.getFirst() <= range1.getSecond()
+        return range1.first() >= range2.first() && range1.first() <= range2.second()
+                || range2.first() >= range1.first() && range2.first() <= range1.second()
                 || within(pair);
 	}
 

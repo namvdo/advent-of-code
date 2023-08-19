@@ -1,23 +1,24 @@
 package com.learntocodetogether.twentytwo;
 
 import com.learntocodetogether.utils.Utils;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-@Slf4j
 public class Day7 {
-    @AllArgsConstructor
     static class Node {
         Node parent;
         Set<Node> children;
         String name;
         int size;
+
+        public Node(Node parent, Set<Node> children, String name, int size) {
+            this.parent = parent;
+            this.children = children;
+            this.name = name;
+            this.size = size;
+        }
 
         @Override
         public boolean equals(Object object) {
@@ -79,7 +80,7 @@ public class Day7 {
         String[] lines = input.split("\n");
         Node root = getNode(lines);
         for(final var child : root.children) {
-            log.info("Child: {}", child.name);
+            System.out.println("Child: " + child.name);
         }
         return getSize(root, 0);
     }
@@ -94,8 +95,8 @@ public class Day7 {
         }
         return size;
     }
-
     public static void main(String[] args) {
-        log.info("result: {}", solvePart1(Utils.getResourceAsString("2022/day7")));
+        String input = Utils.get("./input/day7");
+        System.out.println(solvePart1(input));
     }
 }

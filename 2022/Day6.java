@@ -1,7 +1,6 @@
 package com.learntocodetogether.twentytwo;
 
 import com.learntocodetogether.utils.Utils;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,7 +10,6 @@ import java.util.Set;
 /**
  * @author namvdo
  */
-@Slf4j
 public class Day6 {
     public static int solvePart1(String input) {
         char[] chars = input.toCharArray();
@@ -44,7 +42,7 @@ public class Day6 {
     }
 
     public static void main(String[] args) {
-        log.info("part 1: {}", solvePart1(Utils.getResourceAsString("2022/day6")));
-        log.info("part 2: {}", solvePart2(Utils.getResourceAsString("2022/day6")));
+        System.out.println("part 1: " + solvePart1(Utils.getResourceAsString("2022/day6")));
+        System.out.println("part 2: " + solvePart2(Utils.getResourceAsString("2022/day6")));
     }
 }

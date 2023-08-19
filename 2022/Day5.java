@@ -1,9 +1,6 @@
 package com.learntocodetogether.twentytwo;
 
 import com.learntocodetogether.utils.Utils;
-import lombok.AllArgsConstructor;
-import lombok.ToString;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,16 +8,22 @@ import java.util.stream.Collectors;
 /**
  * @author namvdo
  */
-@Slf4j
 public class Day5 {
 
-	@AllArgsConstructor
-	@ToString
 	static class Operation {
 		int moves;
 		int from;
 		int to;
+
+		public Operation(int moves, int from, int to) {
+			this.moves = moves;
+			this.from = from;
+			this.to = to;
+		}
+
 	}
+
+
 
 	static String solvePart1(String input) {
 		Map<Integer, Stack<Character>> crates = getCrates(input);
@@ -119,8 +122,8 @@ public class Day5 {
 	}
 
 	public static void main(String[] args) {
-//		log.info(solvePart1(Utils.getResourceAsString("2022/day5")));
-        log.info(solvePart2(Utils.getResourceAsString("2022/day5")));
+		System.out.println(solvePart1(Utils.getResourceAsString("2022/day5")));
+        System.out.println(solvePart2(Utils.getResourceAsString("2022/day5")));
 	}
 
 

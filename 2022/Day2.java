@@ -58,8 +58,8 @@ public class Day2 {
 	}
 
 	static int getScore(String line) {
-		RPS enemy = getPair(line).getFirst();
-		RPS you = getPair(line).getSecond();
+		RPS enemy = getPair(line).first();
+		RPS you = getPair(line).second();
 		if (enemy == null || you == null) return 0;
 		return getTournamentResult(enemy, you).score + you.score;
 	}
@@ -83,8 +83,8 @@ public class Day2 {
 		int sum = 0;
 		for(final var line : inputs) {
 			Pair<RPS, RPS> pair = getPair(line);
-			RPS enemy = pair.getFirst();
-			RPS wantedResult = pair.getSecond();
+			RPS enemy = pair.first();
+			RPS wantedResult = pair.second();
 			RPS yourChoice = getFromWantedResult(enemy, wantedResult.yourChoice);
 			Tournament tournamentResult = getTournamentResult(yourChoice, enemy);
 			sum += (tournamentResult.score + yourChoice.score);
