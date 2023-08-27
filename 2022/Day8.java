@@ -35,9 +35,7 @@ public class Day8 {
 		int bottom = countRow(i, j, grid, false);
 		int left = countColumn(i, j, grid, true);
 		int right = countColumn(i, j, grid, false);
-		int i1 = top * bottom * left * right;
-		System.out.println("i: " + i +", j: " + j +  ", top: " + top + ", bottom: " + bottom + ", left: " + left + ", right: " + right);
-		return i1;
+		return top * bottom * left * right;
 	}
 
 	int countColumn(int i, int j, int[][] grid, boolean left) {
