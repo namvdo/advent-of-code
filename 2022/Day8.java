@@ -17,10 +17,82 @@ public class Day8 {
 		return edgedTrees  + innerTrees;
 	}
 
+	public int solvePart2(String input) {
+		String[] lines = input.split("\n");
+		PriorityQueue<Integer> queue = new PriorityQueue<>((o1, o2) -> -1 * Integer.compare(o1, o2));
+		int[][] grid = getTreeGrid(lines);
+		for(int i = 0; i < grid.length; i++) {
+			for(int j = 0; j < grid[i].length; j++) {
+				queue.add(getScenicScore(i, j, grid));
+			}
+		}
+		return queue.peek();
+	}
+
+
+	int getScenicScore(int i, int j, int[][] grid) {
+		int top = countRow(i, j, grid, true);
+		int bottom = countRow(i, j, grid, false);
+		int left = countColumn(i, j, grid, true);
+		int right = countColumn(i, j, grid, false);
+		int i1 = top * bottom * left * right;
+		System.out.println("i: " + i +", j: " + j +  ", top: " + top + ", bottom: " + bottom + ", left: " + left + ", right: " + right);
+		return i1;
+	}
+
+	int countColumn(int i, int j, int[][] grid, boolean left) {
+		int c = 0;
+		int val = grid[i][j];
+		if (left) {
+			for (int k = j - 1; k >= 0; k--) {
+				if (grid[i][k] < val) {
+					c++;
+				} else {
+					c++;
+					break;
+				}
+			}
+		} else {
+			for (int k = j + 1; k < grid[i].length; k++) {
+				if (grid[i][k] < val) {
+					c++;
+				} else {
+					c++;
+					break;
+				}
+			}
+		}
+		return c;
+	}
+
+	int countRow(int i, int j, int[][] grid, boolean top) {
+		int c = 0;
+		int val = grid[i][j];
+		if (top) {
+			for (int k = i - 1; k >= 0; k--) {
+				if (grid[k][j] < val) {
+					c++;
+				} else {
+					c++;
+					break;
+				}
+			}
+		} else {
+			for (int k = i + 1; k < grid[i].length; k++) {
+				if (grid[k][j] < val) {
+					c++;
+				} else {
+					c++;
+					break;
+				}
+			}
+		}
+		return c;
+	}
 
 	public static void main(String[] args) throws ExecutionException, InterruptedException {
 		Day8 day8 = new Day8();
-		int c = day8.solvePart1(Utils.get("./input/day8"));
+		int c = day8.solvePart2(Utils.get("./input/day8"));
 		System.out.println("total: " + c);
 	}
 
