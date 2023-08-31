@@ -12,40 +12,46 @@ import java.util.stream.Collectors;
  **/
 public class Day11 {
 
+	static final int ROUND_1 = 20;
+	static final int ROUND_2 = 10000;
 	public static void main(String[] args) {
 		String s = Utils.get("./input/day11");
-		System.out.println("Part 1: " + solvePart1(s));
+		System.out.println("Part 1: " + solve(s, ROUND_1));
+		System.out.println("Part 2: " + solve(s, ROUND_2));
 	}
 
-	static final int ROUNDS = 20;
 	static final int TOTAL_MONKEYS = 8;
 
-	public static int solvePart1(String input) {
+	public static long solve(String input, int rounds) {
 		List<MonkeyInfo> monkeyInfos = parse(input);
-		List<Integer> monkeyToInspect = new ArrayList<>();
+		List<Long> monkeyToInspect = new ArrayList<>();
 		for(int i = 0; i < TOTAL_MONKEYS; i++) {
-			monkeyToInspect.add(0);
+			monkeyToInspect.add(0L);
 		}
 		PriorityQueue<Integer> queue = new PriorityQueue<>();
 		Map<Integer, MonkeyInfo> monkeyToItem = new HashMap<>();
 		for (final MonkeyInfo monkeyInfo : monkeyInfos) {
 			monkeyToItem.put(monkeyInfo.ithMonkey, monkeyInfo);
 		}
-		for(int i = 0; i < ROUNDS; i++) {
+		for(int i = 0; i < rounds; i++) {
 			for (MonkeyInfo monkeyInfo : monkeyInfos) {
 				int monkey = monkeyInfo.ithMonkey();
-				Queue<Integer> items = monkeyInfo.startingItems();
-				BiFunction<Integer, Integer, Integer> operation = monkeyInfo.operation();
-				Predicate<Integer> divisible = monkeyInfo.divisible();
+				Queue<Long> items = monkeyInfo.startingItems();
+				BiFunction<Long, Long, Long> operation = monkeyInfo.operation();
+				Predicate<Long> divisible = monkeyInfo.divisible();
 				while (!items.isEmpty()) {
-					int worryLevel = items.poll();
+					long worryLevel = items.poll();
 					monkeyToInspect.set(monkey, monkeyToInspect.get(monkey) + 1);
 					if (monkeyInfo.operand == -1) {
 						worryLevel = operation.apply(worryLevel, worryLevel);
 					} else {
-						worryLevel = operation.apply(worryLevel, monkeyInfo.operand);
+						worryLevel = operation.apply(worryLevel, (long) monkeyInfo.operand);
 					}
-					worryLevel /= 3;
+					if (ROUND_1 == rounds) {
+					    worryLevel /= 3;
+					} else {
+						worryLevel %= 9699690;
+					}
 					if (divisible.test(worryLevel)) {
 						MonkeyInfo trueMonkey = monkeyToItem.get(monkeyInfo.trueMonkey);
 						trueMonkey.addItem(worryLevel);
@@ -57,7 +63,7 @@ public class Day11 {
 			}
 		}
 		monkeyToInspect.sort((o1, o2) -> -1 * o1.compareTo(o2));
-		return monkeyToInspect.subList(0, 2).stream().reduce(1, (a, b) -> a * b);
+		return monkeyToInspect.subList(0, 2).stream().reduce(1L, (a, b) -> (long) a * b);
 	}
 
 
@@ -77,14 +83,14 @@ public class Day11 {
 					.toList()
 					.get(0));
 			String i = p[1].split("Starting items:")[1];
-			Queue<Integer> items = new ArrayDeque<>(Arrays.stream(i.split(","))
+			Queue<Long> items = new ArrayDeque<>(Arrays.stream(i.split(","))
 					.map(String::trim)
-					.map(Integer::parseInt).toList());
+					.map(Long::parseLong).toList());
 			String opt = p[2].split("=")[1].trim();
 			Operation operation = parseOpt(opt);
 			String[] div = p[3].split("divisible by");
 			int divBy = Integer.parseInt(div[div.length - 1].trim());
-			Predicate<Integer> test = (x) -> x % divBy == 0;
+			Predicate<Long> test = (x) -> x % divBy == 0;
 			String[] c1 = p[4].split("\\s+");
 			int trueMonkey = Integer.parseInt(c1[c1.length - 1].trim());
 			String[] c2 = p[5].split("\\s+");
@@ -102,10 +108,10 @@ public class Day11 {
 					.map(String::trim)
 					.toList();
 			if (parts.get(0).equals(parts.get(1))) {
-				BiFunction<Integer, Integer, Integer> func = (a, b) -> a * a;
+				BiFunction<Long, Long, Long> func = (a, b) -> a * a;
 				return new Operation(func, -1);
 			} else {
-				BiFunction<Integer, Integer, Integer> func = (a, b) -> a * b;
+				BiFunction<Long, Long, Long> func = (a, b) -> a * b;
 				int operand = Integer.parseInt(parts.get(1));
 				return new Operation(func, operand);
 			}
@@ -114,7 +120,7 @@ public class Day11 {
 					.map(String::trim)
 					.toList();
 			if (parts.get(0).equals(parts.get(1))) {
-				BiFunction<Integer, Integer, Integer> func = (a, b) -> a + a;
+				BiFunction<Long, Long, Long> func = (a, b) -> a + a;
 				return new Operation(func, -1);
 			} else {
 				int operand = Integer.parseInt(parts.get(1));
@@ -125,10 +131,10 @@ public class Day11 {
 
 
 	record MonkeyInfo(int ithMonkey,
-	                  Queue<Integer> startingItems,
-	                  BiFunction<Integer, Integer, Integer> operation,
+	                  Queue<Long> startingItems,
+	                  BiFunction<Long, Long, Long> operation,
 					  int operand,
-	                  Predicate<Integer> divisible,
+	                  Predicate<Long> divisible,
 	                  int trueMonkey,
 	                  int falseMonkey
 	) {
@@ -136,16 +142,13 @@ public class Day11 {
 		void clearItems() {
 			this.startingItems.clear();
 		}
-		int throwFirstItem() {
-			return this.startingItems.poll();
-		}
-		void addItem(int item) {
+		void addItem(long item) {
 			this.startingItems.add(item);
 		}
 
 	}
 
-	record Operation(BiFunction<Integer, Integer, Integer> func, int operand) {
+	record Operation(BiFunction<Long, Long, Long> func, int operand) {
 			
 	}
 
