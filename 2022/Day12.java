@@ -10,9 +10,55 @@ import java.util.*;
 public class Day12 {
 
 	public static void main(String[] args) {
-		int i = solvePart1(Utils.get("./input/day12"));
+		String input = Utils.get("./input/day12");
+		int i = solvePart1(input);
 		System.out.println("Part 1: " + i);
+		int j = solvePart2(input);
+		System.out.println("Part 2: " + j);
 	}
+
+	public static int solvePart2(String input) {
+		char[][] grid = buildGrid(input);
+		Set<Position> startPositions = getAllLowestElevations(grid);
+		PriorityQueue<Integer> steps = new PriorityQueue<>();
+		for(Position pos : startPositions) {
+			PriorityQueue<StepPosition> stepPositions = new PriorityQueue<>();
+			stepPositions.add(new StepPosition(0, pos.x, pos.y));
+			boolean[][] visited = buildVisitedGrid(grid.length, grid[0].length);
+			while (!stepPositions.isEmpty()) {
+				StepPosition stepPosition = stepPositions.poll();
+				int step = stepPosition.step;
+				int i = stepPosition.i;
+				int j = stepPosition.j;
+				if (visited[i][j]) {
+					continue;
+				}
+				visited[i][j] = true;
+				if (grid[i][j] == 'E') {
+					steps.add(step);
+					break;
+				}
+				for(Position neighbor : getNeighbors(grid, i, j)) {
+					stepPositions.add(new StepPosition(step + 1, neighbor.x, neighbor.y));
+				}
+			}
+		}
+		return steps.peek();
+	}
+
+	static Set<Position> getAllLowestElevations(char[][] grid) {
+		Set<Position> positions = new HashSet<>();
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (grid[i][j] == 'a' || grid[i][j] == 'S') {
+					positions.add(new Position(i, j));
+				}
+			}
+		}
+		return positions;
+	}
+
+
 	public static int solvePart1(String input) {
 		char[][] grid = buildGrid(input);
 		int m = grid.length;
